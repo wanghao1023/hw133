@@ -2,6 +2,7 @@
 title: "hw02"
 author: "Hao Wang"
 output: github_document
+date:"05/03/2018"
 ---
 
 ```{r}
