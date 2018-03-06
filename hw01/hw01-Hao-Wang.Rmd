@@ -1,0 +1,421 @@
+---
+title: "hw01-Hao-Wang"
+output: github_document
+---
+#### (2)
+
+```{r}
+
+auto_imports_data <- read.csv('imports-85.data', sep = ",")
+
+```
+
+```{r}
+
+column_names <- c(
+                  "symboling",
+                  "normalized_losses",
+                  "make",
+                  "fuel_type",
+                  "aspiration",
+                  "num_of_doors",
+                  "body_style",
+                  "drive_wheels",
+                  "engine_location",
+                  "wheel_base",
+                  "length",
+                  "width",
+                  "height",
+                  "curb_weight",
+                  "engine_type",
+                  "num_of_cylinders",
+                  "engine_size",
+                  "fuel_system",
+                  "bore",
+                  "stroke",
+                  "compression_ratio",
+                  "horsepower",
+                  "peak_rpm",
+                  "city_mpg",
+                  "highway_mpg",
+                  "price"
+                 )
+
+```
+
+```{r}
+
+column_types <- c(
+                   'integer',
+                   'character',
+                   'character',
+                   'character',
+                   'character',
+                   'character',
+                   'character',
+                   'character',
+                   'character',
+                   'real',
+                   'real',
+                   'real',
+                   'real',
+                   'integer',
+                   'character',
+                   'character',
+                   'integer',
+                   'character',
+                   'character',
+                   'character',
+                   'real',
+                   'integer',
+                   'integer',
+                   'integer',
+                   'integer',
+                   'integer'
+                 )
+
+```
+
+```{r}
+
+auto_imports_data <- read.csv(
+                              'imports-85.data',
+                              sep = ",",
+                              na = "?",
+                              col.names = column_names,
+                              colClasses = column_types,
+                              stringsAsFactors = FALSE
+                            )
+
+
+str(auto_imports_data, vec.len = 1)
+
+```
+
+```{r}
+library(readr)
+auto_imports_data_2 <- read_csv(
+                                  file = "imports-85.data", 
+                                  col_names = column_names,
+                                  na = "?",
+                                  col_types = list(
+                                                    .default = col_character(),
+                                                    "symboling" = col_integer(),
+                                                    "wheel_base" = col_double(),
+                                                    "length" = col_double(),
+                                                    "width" = col_double(),
+                                                    "height" = col_double(),
+                                                    'curb_weight' = col_integer(),
+                                                    'engine_size' = col_integer(),
+                                                    'compression_ratio' = col_double(),
+                                                    'horsepower' = col_integer(),
+                                                    'city_mpg' = col_integer(),
+                                                    'peak_rpm' = col_integer(),
+                                                    'highway_mpg' = col_integer(),
+                                                    'price' = col_integer()
+                                                  )
+                                  
+                                )
+
+str(auto_imports_data_2, vec.len = 1)
+
+```
+#### (3)
+
+#### a. 
+#### If don’t provide a vector of column names and simply invoke read.csv('imports-85.data'), the name of each column of the imported data would be the first value in each column.
+
+#### b.
+#### If don’t provide a vector of column names and invoke read.csv('imports-85.data', header = FALSE), the columns of the imported data would not have any sepecific names but ordered number from "V1" to "V26".
+
+#### c. 
+#### When using the reading table functions, if don’t specify how missing values are codified,  the data type of those columns that contain '?' would be factor.
+
+#### d. 
+#### The main difference between two ways is that, the second specifies and changes the types of several columns from "character" to "integer" and from "factor" to "character". The reason that the data frame imported in the second option bigger (in terms of bytes) than the data frame imported in the first option is that when storing an R object, the stored data requiring more bytes as number that as character(words).
+
+#### e.  
+#### if convert data frame as an R matrix, the data values in the resulting matrix would only include the column of numercial(num and int) types in the original data frame ignoring the other type of columns (chr).
+
+#### (4)
+
+* histogram of price with colored bars.
+```{r}
+
+colors <- c("red", "pink", "orange", "yellow", "green", "blue", "violet", "cyan", "purple")
+
+hist(
+  auto_imports_data$price,
+  col = colors,
+  main = "Histogram of Price",
+  xlab = "Price"
+  )
+
+```
+
+* boxplot of horsepower in horizontal orientation.
+
+```{r}
+
+boxplot(
+  auto_imports_data$horsepower, 
+  horizontal = TRUE
+  )
+
+```
+
+* barplot of the frequencies of body_style, arranged in decreasing order.
+
+```{r}
+
+body_syle <- auto_imports_data$body_style
+
+body_syle_frequence <- table(body_syle)
+
+body_syle_frequence_dcr <- sort(body_syle_frequence, decreasing = TRUE)
+
+body_syle_frequence_dcr
+
+barplot(body_syle_frequence_dcr)
+
+```
+
+* stars() plot of vehicles with turbo aspiration, using only variables wheel-base,
+length, width, height, and price.
+
+```{r}
+
+vehicles_turbo <- auto_imports_data[auto_imports_data$aspiration == "turbo", c("wheel_base", "length","width", "height", "price")]
+
+vehicles_turbo
+
+stars(vehicles_turbo) 
+
+```
+
+#### (5)
+#### a. What is the mean price of fuel_type gas cars? And what is the mean price of fuel_type diesel cars? (removing missing values)
+
+```{r}
+
+price_gas <- auto_imports_data[auto_imports_data$fuel_type == "gas", "price"]
+
+price_gas
+
+mean_price_gas <- mean(price_gas, na.rm = TRUE)
+
+mean_price_gas
+
+```
+
+```{r}
+
+price_diesel <- auto_imports_data[auto_imports_data$fuel_type == "diesel", "price"]
+
+price_diesel
+
+mean_price_diesel <- mean(price_diesel, na.rm = TRUE)
+
+mean_price_diesel
+
+```
+
+#### b. What is the make of the car with twelve num_of_cylinders?
+
+```{r}
+
+vehicle_twelve_cylinders <- auto_imports_data[auto_imports_data$num_of_cylinders == "twelve", "make"]
+
+vehicle_twelve_cylinders
+
+```
+
+#### c. What is the make that has the most diesel cars?
+
+```{r}
+
+make_diesel <- auto_imports_data[auto_imports_data$fuel_type == "diesel", "make"]
+
+names(which.max(table(make_diesel))) 
+
+
+
+```
+
+#### d. What is the price of the car with the largest amount of horsepower?
+
+```{r}
+
+price_largest_horsepower <- auto_imports_data$price[which.max(auto_imports_data$horsepower)]
+
+price_largest_horsepower
+
+```
+
+#### e. What is the bottom 10th percentile of city_mpg?
+
+```{r}
+
+quantile(auto_imports_data$city_mpg, .10)
+
+```
+
+#### f. What is the top 10th percentile of highway_mpg?
+
+```{r}
+
+quantile(auto_imports_data$highway_mpg, .90)
+
+```
+
+##### g. What is the median price of those cars in the bottom 10th percentile of city_mpg?
+
+```{r}
+
+price_bottom_10th <- auto_imports_data[auto_imports_data$city_mpg == "17", "price"]
+
+price_bottom_10th
+
+median(price_bottom_10th, na.rm = TRUE)
+
+```
+
+#### (5)
+
+#### a.
+#### If we use dollar operator $ on a dataframe using the name of a column that does not exist, it would give us "NULL" for nothing.
+
+#### b.
+#### The 4th commands, auto_data_frame[ ,make], fails to return the vector mpg. If we don't use cotation on make, like "make", r would regard it as an object instead a name of column and could not find it, which turns our to be error and would not give us the desired vector.
+
+
+#### c.
+#### The 4th command fails to retur the desired vector because if we don't use cotation on 'make', like the 7th command, mtcars[ ,"mpg"], r would regard 'make' as a name of an object instead a name of column and could not find such object, which turns out to be error and would not give us the desired vector.
+
+#### d.
+#### Yes, we can include an R list as a “column” of a data frame. A list is a generic vector containing other objects. As long as the length of each list is equal to the lenght of each column of the dataframe, we are able to add a list as a coulum of a data frame.
+
+#### e.
+#### If we apply as.list() to a data frame, this command will convert each column to a list, while the name  of each column becomes the name of the coresponding list.
+
+#### f.
+#### We can use function data.frame() to convert the object abc genrated by the command abc <- as.list(mtcars) into a data frame.
+
+#### (7)
+
+```{r}
+#find the columns that we need to construct a new data frame
+wheel_base <- auto_imports_data$wheel_base
+length <- auto_imports_data$length
+width <- auto_imports_data$width
+height <- auto_imports_data$height
+curb_weight <- auto_imports_data$curb_weight
+engine_size <- auto_imports_data$engine_size
+compression_ratio <- auto_imports_data$compression_ratio
+horsepower <- auto_imports_data$horsepower
+peak_rpm <- auto_imports_data$peak_rpm
+city_mpg <- auto_imports_data$city_mpg
+highway_mpg <- auto_imports_data$highway_mpg
+price <- auto_imports_data$price
+#create a new data frame with the quantitative variables
+df <- data.frame(
+                  wheel_base,
+                  length,
+                  width,
+                  height,
+                  curb_weight,
+                  engine_size,
+                  compression_ratio,
+                  horsepower,
+                  peak_rpm,
+                  city_mpg,
+                  highway_mpg,
+                  price
+                )
+#eliminating missing values#
+qdat <- na.omit(df)
+
+qdat
+#calculate the correlation#
+correlation <- cor(qdat)
+
+correlation
+#plot two correlogram
+library(corrplot)
+
+corrplot(correlation, method = "color")
+
+corrplot(correlation, method = "pie")
+
+#comments on the patterns and values
+
+# Consider the first correlogran. From the left upper corner to the right lower corner, the correlations of combinations of different variables shift from positive to negative except for the combinations on the diagonl. For the majority of those combinaitons on the diagonal, they have positive correlations equal to 1, becuase a varibe's correlation with itself is 1. Oberved that most combinations with correlaitons that are close to 0 are mainly spread in the region very close to the center of the diagram.
+
+```
+
+#### (8)
+
+#### 8.1)
+* Use prcomp( ) to perform a principal components analysis on qdat; use the argument scale. = TRUE to carry out PCA on standardized data.
+```{r}
+
+auto_imports_prcomp <- prcomp(qdat, scale. = TRUE)
+
+auto_imports_prcomp
+
+names(auto_imports_prcomp)
+
+#eigenvalues
+
+eigenvalues <- auto_imports_prcomp$sdev^2
+
+eigenvalues
+
+#determine the proportion of variation that is “captured” by the first three components.
+
+eigs <- eigenvalues
+eigs_perc <- 100 * eigs / sum(eigs)
+eigs_cum <- cumsum(eigs_perc)
+
+eigs_df <- data.frame(
+  eigenvalue = eigs,
+  percentage = eigs_perc,
+  'cumulative percentage' = eigs_cum
+)
+
+print(round(eigs_df, 4), print.gap = 2)
+```
+
+#### 8.2) PCA plot of vehicles, and PCA plot of variables
+
+```{r}
+loadings <- auto_imports_prcomp$rotation 
+
+loadings
+
+loadings_df <- data.frame(loadings)
+
+PC1 <- loadings_df$PC1
+
+PC2 <- loadings_df$PC2
+
+plot(PC1, PC2)
+
+plot(auto_imports_prcomp$x, type = "n", las = 1)
+abline(h = 0, v = 0)
+points(auto_imports_prcomp$x[ ,1], auto_imports_prcomp$x[ ,2], pch = 19, 
+       col = "#88888877")
+
+```
+
+* Optionally, you can call biplot() of the "prcomop" object to get a simultaneous plot of both the vehicles and the variables.
+```{r}
+biplot(auto_imports_prcomp)
+```
+
+#### Based on my plots, the data follows a positive correlated patterns centered at (0, 0). The density of the data is increasing as moving closer to point (0, 0). And from the tendency of the slope of this pattern, we can say this is a positive correlatedpattern.
+
+
+
+
+
