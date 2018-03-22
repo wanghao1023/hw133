@@ -116,9 +116,13 @@ cut -d "," -f 1,8 ../data/nba2017-roster.csv |
 sort -t "," -k 2nr -k 1r |
 head -n 10 > top10-salaries.csv
 
+(echo "player", "salary"; cat top10-salaries.csv) > tmp;
+mv tmp top10-salaries.csv
+
 cat top10-salaries.csv
 ```
 
+    ## player, salary
     ## "LeBron James",30963450
     ## "Russell Westbrook",26540100
     ## "Mike Conley",26540100
