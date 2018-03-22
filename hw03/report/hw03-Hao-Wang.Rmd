@@ -8,28 +8,24 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.path = '../images/')
 ```
 
-```{r}
-library(ggplot2)
-```
-
 > 2
 
 ```{bash}
-cut -f 2 -d "," nba2017-roster.cvs |
+cut -f 2 -d "," ../data/../data/nba2017-roster.csv |
 tail +2 |
 sort -u > team-names.txt
 head -5 team-names.txt
 ```
 
 ```{bash}
-cut -f 3 -d "," nba2017-roster.cvs |
+cut -f 3 -d "," ../data/../data/nba2017-roster.csv |
 tail +2 |
 sort -u > position-names.txt
 head -5 position-names.txt
 ```
 
 ```{bash}
-cut -f 7 -d "," nba2017-roster.cvs |
+cut -f 7 -d "," ../data/../data/nba2017-roster.csv |
 tail +2 |
 sort |
 uniq -c |
@@ -37,28 +33,28 @@ sort -nr > experience-counts.txt
 head -5 experience-counts.txt
 ```
 ```{bash}
-grep -e LAC -e team nba2017-roster.cvs > LAC.csv
+grep -e LAC -e team ../data/../data/nba2017-roster.csv > LAC.csv
 cat LAC.csv
 ```
 
 ```{bash}
-grep "LAL" nba2017-roster.cvs | cut -d "," -f 6 | sort | uniq -c
+grep "LAL" ../data/nba2017-roster.csv | cut -d "," -f 6 | sort | uniq -c
 ```
 
 ```{bash}
-grep "CLE" nba2017-roster.cvs |
+grep "CLE" ../data/nba2017-roster.csv |
 wc -l
 ```
 
 ```{bash}
-grep -e GSW -e player -e height -e weight nba2017-roster.cvs |
+grep -e GSW -e player -e height -e weight ../data/nba2017-roster.csv |
 cut -d "," -f 1,4,5 > gsw-height-weight.csv
 
 cat gsw-height-weight.csv
 ```
 
 ```{bash}
-cut -d "," -f 1,8 nba2017-roster.cvs |
+cut -d "," -f 1,8 ../data/nba2017-roster.csv |
 sort -t "," -k 2nr -k 1r |
 head -n 10 > top10-salaries.csv
 
