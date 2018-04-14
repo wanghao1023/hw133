@@ -115,7 +115,7 @@ write.csv(clean_data,'../data/stringr_archive.csv')
 plot_archive(clean_data)
 ```
 
-![](../imagesunnamed-chunk-5-1.png)
+![](../images/unnamed-chunk-5-1.png)
 
 > 1.4
 
@@ -125,7 +125,7 @@ clean_data <- clean_archive(raw_data)
 plot_archive(clean_data)
 ```
 
-![](../imagesunnamed-chunk-6-1.png)
+![](../images/unnamed-chunk-6-1.png)
 
 > 1.5 Archives of 'dplyr', 'ggplot2', 'XML', and 'knitr'
 
@@ -170,7 +170,7 @@ knitr_dat <- time_in_yr(knitr_clean)
 ggplot() + geom_step(data=dplyr_dat, aes(x=time, y=size, colour='pink')) + geom_point() + geom_step(data=ggplot2_dat, aes(x=time, y=size), colour='green') + geom_point() + geom_step(data=XML_dat, aes(x=time, y=size), colour='purple') + geom_point() + geom_step(data=knitr_dat, aes(x=time, y=size), colour='blue') + geom_point() + xlab('date') + ylab('size(Kilobytes)')
 ```
 
-![](../imagesunnamed-chunk-13-1.png)
+![](../images/unnamed-chunk-13-1.png)
 
 ``` r
 dat <- dplyr_dat %>%
@@ -181,7 +181,7 @@ dat <- dplyr_dat %>%
 ggplot(data = dat, aes(x = time, y = size, color = name)) + geom_step() + facet_wrap(~name, scales = 'free') 
 ```
 
-![](../imagesunnamed-chunk-14-1.png)
+![](../images/unnamed-chunk-14-1.png)
 
 > 2.1 Splitting Characters
 
@@ -278,7 +278,7 @@ summary(length)
 hist(length, breaks = 50)
 ```
 
-![](../imagesunnamed-chunk-22-1.png)
+![](../images/unnamed-chunk-22-1.png)
 
 > 3.2 Number of mentions
 
@@ -328,7 +328,7 @@ summary(m)
 hist(m)
 ```
 
-![](../imagesunnamed-chunk-26-1.png)
+![](../images/unnamed-chunk-26-1.png)
 
 ``` r
 dat$mention_count <- m
@@ -376,7 +376,7 @@ table(d)
 hist(d)
 ```
 
-![](../imagesunnamed-chunk-31-1.png)
+![](../images/unnamed-chunk-31-1.png)
 
 ``` r
 # Count the number of hashtags in the tweet contents.
