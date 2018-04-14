@@ -1,0 +1,269 @@
+---
+title: "hw04-Hao-Wang"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../images')
+```
+
+```{r}
+library(XML)
+library(stringr)
+library(ggmap)
+library(plotly)
+library(ggplot2)
+```
+
+```{r}
+source("../code/archive-functions.R")
+source("../code/regex-functions.R")
+```
+
+> 1.1 Read Archive Data Table
+
+```{r}
+raw_data <- read_archive('stringr')
+raw_data
+```
+
+> 1.2 Data Cleaning
+
+```{r}
+clean_data <- clean_archive(raw_data)
+clean_data
+
+write.csv(clean_data,'../data/stringr_archive.csv')
+```
+
+> 1.3 Timeline Slot
+
+```{r}
+plot_archive(clean_data)
+```
+
+> 1.4
+
+```{r}
+raw_data <- read_archive('stringr')
+clean_data <- clean_archive(raw_data)
+plot_archive(clean_data)
+```
+
+> 1.5 Archives of 'dplyr', 'ggplot2', 'XML', and 'knitr'
+
+```{r}
+stringr_raw <- read_archive('stringr')
+stringr_clean <- clean_archive(stringr_raw)
+write.csv(stringr_clean, '../data/stringr_archive.csv')
+```
+
+```{r}
+dplyr_raw <- read_archive('dplyr')
+dplyr_clean <- clean_archive(dplyr_raw)
+write.csv(dplyr_clean, '../data/dplyr_archive.csv')
+```
+
+```{r}
+ggplot2_raw <- read_archive('ggplot2')
+ggplot2_clean <- clean_archive(ggplot2_raw)
+write.csv(ggplot2_clean, '../data/ggplot2_archive.csv')
+```
+
+```{r}
+XML_raw <- read_archive('XML')
+XML_clean <- clean_archive(XML_raw)
+write.csv(XML_clean, '../data/XML_archive.csv')
+```
+
+```{r}
+knitr_raw <- read_archive('knitr')
+knitr_clean <- clean_archive(knitr_raw)
+write.csv(knitr_clean, '../data/knitr_archive.csv')
+
+```
+
+```{r}
+dplyr_dat <- time_in_yr(dplyr_clean)
+ggplot2_dat <- time_in_yr(ggplot2_clean)
+XML_dat <- time_in_yr(XML_clean)
+knitr_dat <- time_in_yr(knitr_clean)
+```
+
+```{r}
+ggplot() + geom_step(data=dplyr_dat, aes(x=time, y=size, colour='pink')) + geom_point() + geom_step(data=ggplot2_dat, aes(x=time, y=size), colour='green') + geom_point() + geom_step(data=XML_dat, aes(x=time, y=size), colour='purple') + geom_point() + geom_step(data=knitr_dat, aes(x=time, y=size), colour='blue') + geom_point() + xlab('date') + ylab('size(Kilobytes)')
+```
+
+```{r}
+dat <- dplyr_dat %>%
+  merge(ggplot2_dat,all=TRUE) %>%
+  merge(XML_dat,all=TRUE) %>%
+  merge(knitr_dat,all=TRUE)
+
+ggplot(data = dat, aes(x = time, y = size, color = name)) + geom_step() + facet_wrap(~name, scales = 'free') 
+```
+
+> 2.1 Splitting Characters
+
+```{r}
+split_chars('Go Bear!')
+split_chars('Expecto Patronum')
+```
+
+> 2.2 Number of Vowels
+
+```{r}
+vec <- split_chars('Go Bear!')
+num_vowels(vec)
+```
+
+> 2.3 Counting Vowels
+
+```{r}
+count_vowels('The quick brown fox jumps over the lazy dog')
+count_vowels('THE QUICK BROWN FOR JUMPS OVER THE LAZY DOG')
+```
+
+> 2.4 Reversing Characters 
+
+```{r}
+reverse_chars('gattaca')
+reverse_chars('Lumox Maxima')
+```
+
+> 2.5 Reversing Sentence by Words
+
+```{r}
+reverse_words('sentence! this reverse')
+reverse_words('string')
+```
+
+> 3.1 Numebr of characters per tweet
+
+```{r}
+dat <- read.csv('../data/text-emotion.csv')
+```
+
+```{r}
+n <- 40000
+length = rep(0, n)
+
+for (k in 1:n){
+  length[k]=nchar(as.character(dat[[4]][k]))
+}
+
+summary(length)
+```
+
+```{r}
+hist(length, breaks = 50)
+```
+
+ > 3.2 Number of mentions
+
+```{r}
+v = rep(' ', n)
+l = rep(' ', n)
+m = rep(0, n)
+
+# extract the tweet content
+for(k in 1:n){
+  v[k]=as.character(dat[[4]][k])
+}
+
+# separate the content by words
+for(k in 1:n){
+  l[k] = strsplit(v[k], ' ')
+}
+
+# count the number of mentions
+for(k in 1:n){
+  v=unlist(l[k])
+    for (i in 1:length(v)){
+    h = str_sub(v[i], 1, 1)
+      if (h[1] == '@'){
+        m[k] = m[k]+1
+         }
+    }
+}
+```
+
+```{r}
+table(m)
+```
+
+```{r}
+summary(m)
+```
+
+```{r}
+hist(m)
+```
+
+```{r}
+dat$mention_count <- m
+dat$content[dat$mention_count == '10']
+```
+
+> 3.3 Hashtags
+
+```{r}
+# Count the number of hashtags in the tweet contents
+d=rep(0,40000)
+for(k in 1:40000){
+  v1=unlist(l[k])
+  for (f1 in 1:length(v1)){
+    h1 = str_sub(v1[f1], 1, 1)
+    if (h1[1] == '#'){
+      d[k] = d[k]+1
+    }
+  }
+}
+```
+
+```{r}
+# summaries
+summary(d)
+```
+
+```{r}
+# frequencies
+table(d)
+```
+
+```{r}
+# barplot of counts
+hist(d)
+```
+
+```{r}
+
+# Count the number of hashtags in the tweet contents.
+hashtags <- function(x){
+  return(str_count(x, pattern = "#[A-z_][\\w]+" ))
+}
+```
+
+```{r}
+sum(hashtags(dat$content))
+```
+
+```{r}
+table(hashtags(dat$content))
+```
+
+```{r}
+c <- str_extract(dat$content,pattern = "#[A-z][\\w]+")
+c <- c[!is.na(c)]
+```
+
+```{r}
+# the average length
+mean(nchar(c)-1) 
+```
+
+```{r}
+# the most common length
+hash_mode <- table(nchar(c)-1)
+names(hash_mode)[which(hash_mode==max(hash_mode))]
+```
