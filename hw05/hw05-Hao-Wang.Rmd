@@ -1,0 +1,229 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.path = 'images/')
+```
+
+```{r}
+library(dieroller)
+```
+
+> 1)
+
+```{r}
+# default call: creates a standard fair die
+fair_die <- die() 
+fair_die
+```
+
+```{r}
+# die with non-standard sides
+weird_die <- die(sides = c('i', 'ii', 'iii', 'iv', 'v', 'vi')) 
+weird_die
+```
+
+```{r}
+# create a loaded die
+loaded_die <- die(prob = c(0.075, 0.1, 0.125, 0.15, 0.20, 0.35)) 
+loaded_die
+```
+
+```{r}
+ # bad sides
+bad_die <- die(sides = c('a', 'b', 'c', 'd', 'e'))
+```
+
+```{r}
+# bad prob
+bad_die <- die(
+sides = c('a', 'b', 'c', 'd', 'e', 'f'), prob = c(0.2, 0.1, 0.1, 0.1, 0.5, 0.1))
+```
+
+> 2)
+
+```{r}
+# roll fair die 50 times
+fair_die <- die() 
+set.seed(123)
+fair50 <- roll(fair_die, times = 50) 
+fair50
+```
+
+```{r}
+# roll fair die 50 times
+fair_die <- die()
+# roll 50 times
+set.seed(123)
+fair_50rolls <- roll(fair_die, times = 50)
+# print
+fair_50rolls
+```
+
+```{r}
+# what's in fair50?
+names(fair50)
+fair50$rolls
+fair50$side
+fair50$prob
+fair50$total
+```
+
+```{r}
+ # string die
+str_die <- die(
+  sides = c('a', 'b', 'c', 'd', 'e', 'f'),
+prob = c(0.075, 0.1, 0.125, 0.15, 0.20, 0.35))
+# roll 20 times
+set.seed(123)
+str_rolls <- roll(str_die, times = 20) 
+names(str_rolls)
+
+str_rolls
+```
+
+> 3)
+
+```{r}
+set.seed(123)
+
+fair_50rolls <- roll(fair_die, times = 50)
+
+fair50_sum <- summary(fair_50rolls)
+
+fair50_sum
+```
+
+```{r}
+# what's in the summary
+class(fair50_sum)
+names(fair50_sum)
+fair50_sum$freq
+```
+
+> 4
+
+```{r}
+# plot method
+plot.roll(fair_50rolls)
+```
+
+> 5
+
+```{r}
+# roll fair die
+set.seed(123)
+fair_die <- die()
+fair500 <- roll(fair_die, times = 500)
+# summary method
+summary(fair500)
+```
+
+```{r}
+ # extracting roll in position 500
+fair500[500]
+```
+
+```{r}
+# replacing last roll
+fair500$rolls[500] <- 1
+fair500[500]
+```
+
+```{r}
+summary(fair500)
+```
+
+```{r}
+# adding 100 rolls
+fair500$total <- fair500$total + 100 
+fair600 <- fair500
+summary(fair600)
+```
+
+```{r}
+ # plot method
+plot(fair500, 500)
+```
+
+> De Mere’s problem
+
+```{r}
+die_d=die()
+
+f=list(0,0,0,0)
+thousand_times=rep(list(f), 1000)
+
+for (t in 1:1000){
+  roll1=roll(die_d, 4)
+  g=roll1$rolls
+  g=as.list(g)
+  thousand_times[[t]]=g
+}
+```
+
+```{r}
+counts=0
+for(h in 1:1000){
+    if ('6' %in% thousand_times[[h]]){
+      counts=counts+1
+  }
+counts
+}
+``` 
+
+```{r}
+frequency = counts/1000
+approx = 1-(5/6)^4
+
+frequency
+
+approx 
+```
+
+```{r}
+die_d_2=die()
+
+f1=list(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+
+many_times=rep(list(f1), 1000)
+for (t in 1:1000){
+    roll1 = roll(die_d_2, 48)
+    g=roll1$rolls
+    g=as.list(g)
+    many_times[[t]]=g
+  }
+
+```
+
+
+
+```{r}
+counts1=0
+sixx=0
+
+for(h in 1:1000){
+  k=1
+  sixx=0
+  while(k<49){
+    if(many_times[[h]][[k]]==6 & many_times[[h]][[k+1]]==6){
+      sixx = sixx+1
+      
+    }
+    k=k+2
+  }
+  if(sixx>0){counts1=counts1+1}
+}
+
+counts1
+``` 
+
+```{r}
+freq = counts1/1000
+appro = 1-(35/36)^24
+
+freq
+appro 
+```
