@@ -1,0 +1,44 @@
+---
+title: "Getting Started with dieroll"
+author: "Hao Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+library(dieroller)
+```
+
+## Die Rolling
+
+The package `"dieroll"` is a minimal implementation for simulating rolling
+a die a given number of times, and to visualize the relative frequencies
+in such a series of rolls.
+
+
+## Creating a `die`
+
+The first step is to create a `"die"` object with the function `die()`:
+
+```{r}
+mydie<- die()
+mydie
+```
+
+By default, `die()` creates a fair die with standard sides 1,2,3,4,5,6, and with probability values for each side of 1/6.
+
+You can change the defatuls with arguments `sides` and `prob`:
+
+```{r}
+loaded <- die(sides = c('A','B','C','D','E','F'), prob = c(0.4,0.1,0.1,0.1,0.1,0.2))
+loaded
+```
